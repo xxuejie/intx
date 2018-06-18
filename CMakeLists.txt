@@ -30,6 +30,12 @@ add_compile_options(-mtune=generic)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og")
 
+option(INTX_FUZZING "Build with fuzzer instrumentation" OFF)
+if(INTX_FUZZING)
+    set(CMAKE_EXE_LINKER_FLAGS "-fsanitize=fuzzer-no-link ${CMAKE_EXE_LINKER_FLAGS}")
+    add_compile_options(-fno-omit-frame-pointer -fsanitize=fuzzer,undefined,integer -fno-sanitize-recover=all)
+endif()
+
 add_subdirectory(lib/intx)
 
 if(INTX_TESTING)

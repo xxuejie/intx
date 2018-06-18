@@ -44,6 +44,7 @@ struct safe
     bool normal() const noexcept { return m_status == status::normal; }
     bool plus_infinity() const noexcept { return m_status == status::plus_infinity; }
     bool minus_infinity() const noexcept { return m_status == status::minus_infinity; }
+    bool invalid() const noexcept { return m_status == status::invalid; }
     status get_status() const noexcept { return m_status; }
 
 private:
@@ -54,6 +55,9 @@ private:
 template<typename Int>
 safe<Int> add(safe<Int> a, safe<Int> b)
 {
+    if (a.invalid() || b.invalid())
+        return safe<Int>{status::invalid};
+
     if (b.value() >= 0)
     {
         if (a.value() > safe<Int>::max_value - b.value())
@@ -81,6 +85,12 @@ template<typename Int>
 safe<Int> operator+(Int a, safe<Int> b)
 {
     return safe<Int>{a} + b;
+}
+
+template <typename Int>
+safe<Int> operator+(safe<Int> a, Int b)
+{
+    return a + safe<Int>{b};
 }
 
 template<typename Int>
