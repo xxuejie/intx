@@ -11,6 +11,12 @@ namespace experiments
 {
 namespace
 {
+inline uint64_t umulh(uint64_t x, uint64_t y) noexcept
+{
+    auto p = static_cast<unsigned __int128>(x) * y;
+    return uint64_t(p >> 64);
+}
+
 constexpr uint16_t reciprocal_table_item(uint8_t d9) noexcept
 {
     return uint16_t(0x7fd00 / (0x100 | d9));
@@ -96,6 +102,25 @@ uint64_t udiv_by_reciprocal(uint64_t uu, uint64_t du) noexcept
 
     return q1;
 }
+
+/// Compute reciprocal by unsigned Newton-Raphson recurrence.
+uint64_t reciprocal_unr(uint64_t y) noexcept
+{
+    // decent start
+    uint64_t z = uint64_t{1} << clz(y);
+
+    // z recurrence
+    uint64_t my = -y;
+    for (int i = 0; i < 6; ++i)
+    {
+        uint64_t zd = umulh(z, my * z);
+        if (zd == 0)
+            break;
+        z += zd;
+    }
+    return z;
+}
+
 
 }  // namespace experiments
 }  // namespace intx

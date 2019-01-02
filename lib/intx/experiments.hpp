@@ -11,6 +11,7 @@ namespace intx
 namespace experiments
 {
 uint64_t reciprocal(uint64_t d) noexcept;
+uint64_t reciprocal_unr(uint64_t y) noexcept;
 uint64_t udiv_by_reciprocal(uint64_t u, uint64_t d) noexcept;
 }  // namespace experiments
 }  // namespace intx

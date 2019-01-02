@@ -6,10 +6,10 @@
 #include <experiments.hpp>
 #include <intx/intx.hpp>
 
+#include "../utils/gmp.hpp"
 #include "../utils/random.hpp"
 #include <gtest/gtest.h>
 
-#include "../utils/gmp.hpp"
 
 using namespace intx;
 
@@ -177,19 +177,44 @@ TEST(div, sdivrem_512)
 
 TEST(div, reciprocal)
 {
+    // Test reciprocal procedures.
+    // Only use normalized d as some procedures require this.
+
     constexpr auto n = 1000000;
 
     constexpr auto d_start = uint64_t{1} << 63;
     for (uint64_t d = d_start; d < d_start + n; ++d)
     {
         auto v = experiments::reciprocal(d);
-        EXPECT_EQ(v, reciprocal_naive(d)) << d;
+        auto z = experiments::reciprocal_unr(d);
+        auto naive = reciprocal_naive(d);
+        EXPECT_EQ(v, naive) << d;
+        EXPECT_EQ(z, naive) << d;
     }
 
     constexpr auto d_end = ~uint64_t{0};
     for (uint64_t d = d_end; d > d_end - n; --d)
     {
         auto v = experiments::reciprocal(d);
-        EXPECT_EQ(v, reciprocal_naive(d)) << d;
+        auto z = experiments::reciprocal_unr(d);
+        auto naive = reciprocal_naive(d);
+        EXPECT_EQ(v, naive) << d;
+        EXPECT_EQ(z, naive) << d;
+    }
+}
+
+TEST(div, reciprocal_random) {
+
+    constexpr auto n = 10;
+
+    std::uniform_int_distribution<uint64_t> dist{1};
+    std::mt19937_64 rng{get_seed()};
+    const auto d_start = dist(rng);
+
+    for (uint64_t d = d_start; d < d_start + n; ++d)
+    {
+        auto naive = reciprocal_naive(d);
+        auto z = experiments::reciprocal_unr(d);
+        EXPECT_EQ(z, naive) << d;
     }
 }
