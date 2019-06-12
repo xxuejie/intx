@@ -4,6 +4,7 @@
 
 #include "test_cases.hpp"
 
+#include <experimental/add.hpp>
 #include <experimental/div.hpp>
 #include <intx/intx.hpp>
 
@@ -222,6 +223,9 @@ TEST(uint256, arithmetic)
     for (const auto& t : arithmetic_test_cases)
     {
         EXPECT_EQ(t.x + t.y, t.sum);
+        EXPECT_EQ(add_asm(t.x, t.y), t.sum);
+        EXPECT_EQ(add_c1(t.x, t.y), t.sum);
+        EXPECT_EQ(add_c2(t.x, t.y), t.sum);
         EXPECT_EQ(t.y + t.x, t.sum);
         EXPECT_EQ(t.sum - t.x, t.y);
         EXPECT_EQ(t.sum - t.y, t.x);

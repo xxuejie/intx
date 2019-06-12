@@ -19,5 +19,7 @@ struct arithmetic_test_case
 arithmetic_test_case arithmetic_test_cases[] = {
     {0, 0, 0, 0},
     {127, 1, 128, 127},
+    {1, 1, 2, 1},
+    {{{1, 1}, {1, 1}}, {{1, 1}, {1, 1}}, {{2, 2}, {2, 2}}, {{4, 3}, {2, 1}}},
 };
 }  // namespace
