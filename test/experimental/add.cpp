@@ -21,6 +21,16 @@ uint256 _add_c2(const uint256& x, const uint256& y) noexcept
     return add_c2(x, y);
 }
 
+uint256 _add_c3(const uint256& x, const uint256& y) noexcept
+{
+    return add_c3(x, y);
+}
+
+uint256 _add_c4(const uint256& x, const uint256& y) noexcept
+{
+    return add_c4(x, y);
+}
+
 uint256 _add(const uint256& x, const uint256& y) noexcept
 {
     return x + y;

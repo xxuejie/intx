@@ -224,8 +224,15 @@ TEST(uint256, arithmetic)
     {
         EXPECT_EQ(t.x + t.y, t.sum);
         EXPECT_EQ(add_asm(t.x, t.y), t.sum);
+        EXPECT_EQ(add_asm(t.y, t.x), t.sum);
         EXPECT_EQ(add_c1(t.x, t.y), t.sum);
+        EXPECT_EQ(add_c1(t.y, t.x), t.sum);
         EXPECT_EQ(add_c2(t.x, t.y), t.sum);
+        EXPECT_EQ(add_c2(t.y, t.x), t.sum);
+        EXPECT_EQ(add_c3(t.x, t.y), t.sum);
+        EXPECT_EQ(add_c3(t.y, t.x), t.sum);
+        EXPECT_EQ(add_c4(t.x, t.y), t.sum);
+        EXPECT_EQ(add_c4(t.y, t.x), t.sum);
         EXPECT_EQ(t.y + t.x, t.sum);
         EXPECT_EQ(t.sum - t.x, t.y);
         EXPECT_EQ(t.sum - t.y, t.x);
