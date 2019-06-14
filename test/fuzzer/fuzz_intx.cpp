@@ -3,6 +3,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 #include <intx/intx.hpp>
+#include <experimental/add.hpp>
 
 #include "../utils/gmp.hpp"
 #include <cstring>
@@ -84,8 +85,15 @@ inline void test_op(const uint8_t* data, size_t data_size) noexcept
         break;
     }
     case op::add:
-        expect_eq(a + b, gmp::add(a, b));
+    {
+        auto s = a + b;
+        expect_eq(s, gmp::add(a, b));
+        expect_eq(s, intx::add_asm(a, b));
+        expect_eq(s, intx::add_c1(a, b));
+//        expect_eq(s, intx::add_c2(a, b));
+//        expect_eq(s, intx::add_c3(a, b));
         break;
+    }
 
     case op::sub:
     {
@@ -103,8 +111,8 @@ inline void test_op(const uint8_t* data, size_t data_size) noexcept
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t data_size) noexcept
 {
-    test_op<uint512>(data, data_size);
+//    test_op<uint512>(data, data_size);
     test_op<uint256>(data, data_size);
-    test_op<uint128>(data, data_size);
+//    test_op<uint128>(data, data_size);
     return 0;
 }
