@@ -71,16 +71,19 @@ inline uint256 add_c4(const uint256& x, const uint256& y) noexcept
     auto k1 = a < x.lo.lo;
 
     auto b = x.lo.hi + y.lo.hi;
-    auto k2 = b < x.lo.hi;
+    auto k2_0 = b < x.lo.hi;
     b += k1;
-    k2 += b < k1;
+    auto k2_1 = b < k1;
 
     auto c = x.hi.lo + y.hi.lo;
     auto k3 = c < x.hi.lo;
+    unsigned k2 = k2_0 + k2_1;
     c += k2;
-    k3 += c < k2;
 
-    auto d = x.hi.hi + y.hi.hi + k3;
+    auto k4 = c < k2;
+
+    auto kx = k3 + k4;
+    auto d = x.hi.hi + y.hi.hi + kx;
     return {{d, c}, {b, a}};
 }
 }  // namespace intx
