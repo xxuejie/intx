@@ -291,7 +291,15 @@ constexpr uint128 constexpr_umul(uint64_t x, uint64_t y) noexcept
 /// Full unsigned multiplication 64 x 64 -> 128.
 inline uint128 umul(uint64_t x, uint64_t y) noexcept
 {
-#if defined(__SIZEOF_INT128__)
+#if defined(__riscv) && (__riscv_xlen == 64)
+    asm("mv a5, %[y]\n\t"
+        "mulhu %[y], %[x], a5\n\t"
+        "mul %[x], %[x], a5"
+        : [x] "+r"(x), [y] "+r"(y)
+        :
+        : "a5");
+    return {y, x};
+#elif defined(__SIZEOF_INT128__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
     const auto p = static_cast<unsigned __int128>(x) * y;
